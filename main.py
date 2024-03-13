@@ -46,8 +46,10 @@ class Main():
        
         train, test = train_orig, test_orig
 
-        if 'attack' in train.columns:
-            train = train.drop(columns=['attack'])
+        if 'Normal/Attack' in train.columns:
+            train = train.drop(columns=['Normal/Attack'])
+
+        test['attack'] = (test_orig['Normal/Attack'] != 'Normal').astype(float)
 
         feature_map = get_feature_map(dataset)
         fc_struc = get_fc_graph_struc(dataset)
@@ -103,6 +105,7 @@ class Main():
         if len(self.env_config['load_model_path']) > 0:
             model_save_path = self.env_config['load_model_path']
         else:
+            print("Training start...")
             model_save_path = self.get_save_path()[0]
 
             self.train_log = train(self.model, model_save_path, 
@@ -116,7 +119,8 @@ class Main():
                 dataset_name=self.env_config['dataset']
             )
         
-        # test            
+        # test
+        print("Testing start...")         
         self.model.load_state_dict(torch.load(model_save_path))
         best_model = self.model.to(self.device)
 
@@ -180,7 +184,7 @@ class Main():
         
         if self.datestr is None:
             now = datetime.now()
-            self.datestr = now.strftime('%m|%d-%H:%M:%S')
+            self.datestr = now.strftime('%m_%d-%H-%M-%S')
         datestr = self.datestr          
 
         paths = [

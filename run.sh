@@ -1,6 +1,5 @@
 gpu_n=$1
 DATASET=$2
-
 seed=5
 BATCH_SIZE=32
 SLIDE_WIN=5
@@ -11,14 +10,10 @@ topk=5
 out_layer_inter_dim=128
 val_ratio=0.2
 decay=0
-
-
 path_pattern="${DATASET}"
 COMMENT="${DATASET}"
-
 EPOCH=30
 report='best'
-
 if [[ "$gpu_n" == "cpu" ]]; then
     python main.py \
         -dataset $DATASET \
